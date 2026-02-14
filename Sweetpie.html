@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Anijar 💗</title>
+
+<style>
+
+body{
+margin:0;
+font-family: 'Segoe UI', sans-serif;
+background: radial-gradient(circle at top,#1a001f,#000);
+color:white;
+text-align:center;
+overflow-x:hidden;
+}
+
+/* opening screen */
+
+#open{
+position:fixed;
+width:100%;
+height:100%;
+background:linear-gradient(#000,#1a001f);
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+z-index:99;
+}
+
+button{
+padding:14px 28px;
+border:none;
+border-radius:30px;
+background:#ff4da6;
+color:white;
+font-size:18px;
+box-shadow:0 0 20px #ff4da6;
+}
+
+/* glowing names */
+
+.glow{
+font-size:40px;
+margin-top:20px;
+animation:glow 2s infinite alternate;
+}
+@keyframes glow{
+from{text-shadow:0 0 10px #ff4da6;}
+to{text-shadow:0 0 40px #ff99cc;}
+}
+
+/* floating hearts */
+
+.heart{
+position:fixed;
+bottom:-20px;
+font-size:20px;
+animation:float 8s linear infinite;
+opacity:.7;
+}
+@keyframes float{
+to{transform:translateY(-110vh);}
+}
+
+/* typing text */
+
+#typing{
+font-size:22px;
+padding:20px;
+max-width:90%;
+margin:auto;
+min-height:100px;
+}
+
+/* cake */
+
+.cake{
+font-size:80px;
+cursor:pointer;
+margin-top:20px;
+transition:.5s;
+}
+
+/* fireworks */
+
+.firework{
+position:fixed;
+width:6px;
+height:6px;
+background:white;
+border-radius:50%;
+animation:explode 1s forwards;
+}
+@keyframes explode{
+to{
+transform:translate(var(--x),var(--y));
+opacity:0;
+}
+}
+
+/* confetti */
+
+.confetti{
+position:fixed;
+width:8px;
+height:14px;
+background:yellow;
+top:-20px;
+animation:fall 4s linear forwards;
+}
+@keyframes fall{
+to{transform:translateY(110vh) rotate(360deg);}
+}
+
+/* countdown */
+
+#count{
+font-size:24px;
+margin-top:15px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="open">
+<h1>💖 A little surprise 💖</h1>
+<button onclick="start()">Open</button>
+</div>
+
+<audio id="music" loop>
+<source src="Gehra_Hua___Dhurandhar___Ranveer_Singh,_Sara_Arjun,_Shashwat_Sachdev,_Arijit_Singh,_Irshad_Kamil(48k).mp3">
+</audio>
+
+<h2 class="glow">Shonamoni wishing Anijar 💗</h2>
+
+<div id="count"></div>
+
+<div id="age"></div>
+
+<div id="typing"></div>
+
+<div class="cake" onclick="celebrate()">🎂</div>
+<p>Tap cake to celebrate</p>
+
+<script>
+
+/* start */
+
+function start(){
+document.getElementById("open").style.display="none";
+document.getElementById("music").play();
+hearts();
+countdown();
+typeMsg();
+}
+
+/* floating hearts */
+
+function hearts(){
+setInterval(()=>{
+let h=document.createElement("div");
+h.className="heart";
+h.innerHTML="💗";
+h.style.left=Math.random()*100+"vw";
+h.style.fontSize=(15+Math.random()*25)+"px";
+document.body.appendChild(h);
+setTimeout(()=>h.remove(),8000);
+},500);
+}
+
+/* midnight age calculation */
+
+function countdown(){
+
+let birth=new Date("2000-02-16T00:00:00");
+
+setInterval(()=>{
+
+let now=new Date();
+let next=new Date(now.getFullYear(),1,16,0,0,0);
+
+if(now>next) next.setFullYear(next.getFullYear()+1);
+
+let diff=next-now;
+
+let h=Math.floor(diff/1000/60/60);
+let m=Math.floor(diff/1000/60)%60;
+let s=Math.floor(diff/1000)%60;
+
+document.getElementById("count").innerHTML=
+"Birthday countdown: "+h+"h "+m+"m "+s+"s";
+
+if(h==0 && m==0 && s<=1){
+let age=now.getFullYear()-2000;
+document.getElementById("age").innerHTML=
+"<h1>✨ Turning "+age+" ✨</h1>";
+}
+
+},1000);
+
+}
+
+/* typing romantic indirect confession */
+
+let text=`Some people arrive quietly…
