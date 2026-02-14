@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Birthday Surprise</title>
+
+<style>
+
+/* VIDEO BACKGROUND */
+
+video#bg{
+position:fixed;
+right:0;bottom:0;
+min-width:100%;
+min-height:100%;
+object-fit:cover;
+z-index:-2;
+filter:brightness(0.35);
+}
+
+/* soft animated gradient overlay */
+
+body::before{
+content:"";
+position:fixed;
+inset:0;
+background:radial-gradient(circle at 20% 30%,rgba(255,120,170,.25),transparent 40%),
+           radial-gradient(circle at 80% 70%,rgba(120,170,255,.25),transparent 40%);
+animation:move 12s infinite alternate ease-in-out;
+z-index:-1;
+}
+
+@keyframes move{
+from{transform:translateY(-20px)}
+to{transform:translateY(20px)}
+}
+
+body{
+margin:0;
+font-family:Segoe UI,sans-serif;
+text-align:center;
+color:#eee;
+background:#0f0a12;
+}
+
+/* LOCK SCREEN */
+
+#lock{
+position:fixed;
+inset:0;
+background:#0f0a12;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+z-index:10;
+text-align:center;
+padding:20px;
+}
+
+#main{display:none;padding:20px}
+
+/* glowing names */
+
+.glow{
+font-size:30px;
+font-weight:bold;
+color:#fff;
+text-shadow:0 0 8px #ff5fa2,0 0 22px #ff5fa2,0 0 40px #ff5fa2;
+margin-top:10px;
+}
+
+/* card glass style */
+
+.glass{
+background:rgba(255,255,255,.08);
+backdrop-filter:blur(12px);
+border-radius:18px;
+padding:18px;
+margin:16px;
+}
+
+/* buttons */
+
+button{
+padding:12px 24px;
+border:none;
+border-radius:24px;
+background:linear-gradient(45deg,#ff5fa2,#ff9966);
+color:white;
+font-size:15px;
+margin:8px;
+}
+
+/* slideshow */
+
+.slider{
+width:92%;
+max-width:340px;
+margin:20px auto;
+}
+
+.slider img{
+width:100%;
+border-radius:16px;
+display:none;
+}
+.slider img.active{display:block}
+
+/* typing */
+
+#typing{min-height:80px}
+
+/* cake */
+
+#cake{font-size:78px;display:none;cursor:pointer}
+
+/* secret */
+
+#secret{display:none}
+
+/* floating hearts */
+
+.heart{
+position:fixed;
+bottom:-20px;
+font-size:18px;
+animation:float 6s linear forwards;
+opacity:.7;
+}
+
+@keyframes float{
+to{transform:translateY(-110vh);opacity:0}
+}
+
+canvas{
+position:fixed;top:0;left:0;pointer-events:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- VIDEO BACKGROUND (optional) -->
+<video id="bg" autoplay muted loop>
+<source src="bg.mp4" type="video/mp4">
+</video>
+
+<!-- MIDNIGHT LOCK -->
+<div id="lock">
+<h2>🌙 A Birthday Surprise For Anijar💗</h2>
+<p>Unlocks automatically at midnight</p>
+<p id="time"></p>
+</div>
+
+<canvas id="fire"></canvas>
+
+<div id="main">
+
+<div class="glow">Shonamoni ✨ Anijar💗</div>
+
+<h1>🎂 Happy Birthday</h1>
+
+<div class="glass">
+<button onclick="music.play()">▶ Play Music</button>
+<audio id="music" loop>
+<source src="gehrhua.mp3" type="audio/mpeg">
+</audio>
+</div>
+
+<!-- SLIDESHOW -->
+<div class="slider glass">
+<img class="active" src="photo1.jpg">
+<img src="photo2.jpg">
+<img src="photo3.jpg">
+<img src="photo4.jpg">
+</div>
+
+<!-- LETTER -->
+<div class="glass" id="typing"></div>
+
+<div id="cake" onclick="cutCake()">🎂</div>
+
+<button onclick="openSecret()">Open Surprise</button>
+
+<div id="secret" class="glass">
+🌟 May your days feel peaceful, your goals feel closer,  
+and every new step bring something beautiful. 🎉
+</div>
+
+</div>
+
+<script>
+
+/* MIDNIGHT AUTO UNLOCK (Feb 16) */
+
+let lock=document.getElementById("lock");
+let main=document.getElementById("main");
+
+function check(){
+let now=new Date();
+let target=new Date(now.getFullYear()+"-02-16T00:00:00");
+
+if(now>target) target=new Date(now.getFullYear()+1+"-02-16T00:00:00");
+
+let diff=target-now;
+
+if(diff<=0){
+lock.style.display="none";
+main.style.display="block";
+return;
+}
+
+let h=Math.floor(diff/3600000);
+let m=Math.floor(diff/60000)%60;
+let s=Math.floor(diff/1000)%60;
+
+time.innerHTML=`Opens in ${h}h ${m}m ${s}s`;
+}
+
+setInterval(check,1000);
+
+/* slideshow */
+
+let slides=document.querySelectorAll(".slider img");
+let i=0;
+setInterval(()=>{
+slides[i].classList.remove("active");
+i=(i+1)%slides.length;
+slides[i].classList.add("active");
+},2600);
+
+/* typing */
+
+let text="Today is a beautiful reminder of your journey, your quiet strength, and the warmth you bring into every moment. May the coming year open new doors, peaceful mornings, exciting victories, and memories worth keeping forever.";
+let idx=0;
+function type(){
+if(idx<text.length){
+typing.innerHTML+=text.charAt(idx);
+idx++;
+setTimeout(type,28);
+}else cake.style.display="block";
+}
+type();
+
+/* floating hearts */
+
+setInterval(()=>{
+let h=document.createElement("div");
+h.className="heart";
+h.innerHTML="💗";
+h.style.left=Math.random()*100+"vw";
+document.body.appendChild(h);
+setTimeout(()=>h.remove(),6000);
+},900);
+
+/* password */
+
+function openSecret(){
+let p=prompt("Enter password");
+if(p==="My Sunshine"){
+secret.style.display="block";
+confetti();fireworks();
+}
+}
+
+/* cake */
+
+function cutCake(){
+cake.innerHTML="🍰";
+confetti();fireworks();
+}
+
+/* confetti */
+
+function confetti(){
+for(let i=0;i<120;i++){
+let c=document.createElement("div");
+c.style.position="fixed";
+c.style.width="7px";
+c.style.height="7px";
+c.style.background=`hsl(${Math.random()*360},100%,60%)`;
+c.style.left=Math.random()*100+"vw";
+c.style.top="-10px";
+c.style.transition="3s linear";
+document.body.appendChild(c);
+setTimeout(()=>c.style.top="100vh",10);
+setTimeout(()=>c.remove(),3000);
+}
+}
+
+/* fireworks */
+
+const canvas=document.getElementById("fire");
+const ctx=canvas.getContext("2d");
+canvas.width=innerWidth;canvas.height=innerHeight;
+let parts=[];
+
+function fireworks(){
+setInterval(()=>{
+let x=Math.random()*canvas.width;
+let y=Math.random()*canvas.height/2;
+for(let i=0;i<50;i++){
+parts.push({x,y,dx:(Math.random()-0.5)*6,dy:(Math.random()-0.5)*6,life:80});
+}
+},700);
+}
+
+function anim(){
+requestAnimationFrame(anim);
+ctx.fillStyle="rgba(0,0,0,0.08)";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+for(let i=0;i<parts.length;i++){
+let p=parts[i];
+p.x+=p.dx;p.y+=p.dy;p.life--;
+ctx.fillStyle=`hsl(${Math.random()*360},100%,65%)`;
+ctx.fillRect(p.x,p.y,3,3);
+if(p.life<=0)parts.splice(i,1);
+}
+}
+anim();
+
+</script>
+</body>
+</html>
